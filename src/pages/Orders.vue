@@ -3,5 +3,9 @@ import { orders } from '@/api/mock'
 </script>
 
 <template>
-  <div v-for="order in orders" :key="order.id">{{ order.id }}: {{ order.product }} - {{ order.status }}</div>
+  <el-table :data="orders">
+    <el-table-column prop="id" label="ID" />
+    <el-table-column prop="product" label="Product" />
+    <el-table-column prop="status" label="Status" />
+  </el-table>
 </template>
