@@ -9,6 +9,7 @@ const router = createRouter({
     {
       path: '/',
       component: AdminLayout,
+      redirect: '/products',
       children: [
         { path: 'products', component: Products },
         { path: 'orders', component: Orders },
