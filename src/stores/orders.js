@@ -1,17 +1,20 @@
 import { defineStore } from 'pinia'
-import { orders } from '@/api/mock'
+import http from '@/api/http'
 
 export const useOrdersStore = defineStore('orders', {
   state: () => ({
-    items: orders,
+    items: [],
+    loading: false,
   }),
   actions: {
-    fetchOrders() {
+    async fetchOrders() {
       this.loading = true
-      setTimeout(() => {
-        this.items = orders
+      try {
+        const { data } = await http.get('/orders')
+        this.items = data
+      } finally {
         this.loading = false
-      }, 1000)
+      }
     },
   },
 })
