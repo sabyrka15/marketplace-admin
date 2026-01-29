@@ -1,10 +1,23 @@
+<script setup>
+import { ref } from 'vue'
+
+const activePage = ref('Products')
+</script>
+
 <template>
   <el-container class="layout">
-    <el-aside class="aside">Aside</el-aside>
+    <el-aside class="aside">
+      <el-menu>
+        <el-menu-item @click="activePage = 'Products'">Products</el-menu-item>
+        <el-menu-item @click="activePage = 'Orders'">Orders</el-menu-item>
+      </el-menu>
+    </el-aside>
 
     <el-container>
       <el-header class="header">Header</el-header>
-      <el-main>Main</el-main>
+      <el-main>
+        {{ activePage }}
+      </el-main>
     </el-container>
   </el-container>
 </template>
