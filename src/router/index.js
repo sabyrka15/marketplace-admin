@@ -1,13 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AdminLayout from '@/layouts/AdminLayout.vue'
+import Products from '@/pages/Products.vue'
+import Orders from '@/pages/Orders.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'admin',
       component: AdminLayout,
+      children: [
+        { path: 'products', component: Products },
+        { path: 'orders', component: Orders },
+      ],
     },
   ],
 })
