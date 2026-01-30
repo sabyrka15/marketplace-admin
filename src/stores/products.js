@@ -20,5 +20,9 @@ export const useProductsStore = defineStore('products', {
       const { data } = await http.post('/products', payload)
       this.items.push(data)
     },
+    async deleteProduct(id) {
+      await http.delete(`/products/${id}`)
+      this.items = this.items.filter((item) => item.id !== id)
+    },
   },
 })

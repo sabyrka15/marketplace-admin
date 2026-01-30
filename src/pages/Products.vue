@@ -20,6 +20,10 @@ const save = async () => {
   form.price = null
 }
 
+const remove = async (id) => {
+  await productsStore.deleteProduct(id)
+}
+
 onMounted(() => {
   productsStore.fetchProducts()
 })
@@ -48,5 +52,10 @@ onMounted(() => {
   <el-table :data="productsStore.items" v-loading="productsStore.loading">
     <el-table-column prop="name" label="Name" />
     <el-table-column prop="price" label="Price" />
+    <el-table-column label="Actions" width="120">
+      <template #default="{ row }">
+        <el-button type="danger" size="small" @click="remove(row.id)"> Delete </el-button>
+      </template>
+    </el-table-column>
   </el-table>
 </template>
