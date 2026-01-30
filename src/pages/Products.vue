@@ -1,6 +1,7 @@
 <script setup>
 import { useProductsStore } from '@/stores/products'
 import { onMounted, reactive, ref } from 'vue'
+import { ElMessageBox, ElMessage } from 'element-plus'
 
 const productsStore = useProductsStore()
 const dialogVisible = ref(false)
@@ -32,7 +33,19 @@ const save = async () => {
 }
 
 const remove = async (id) => {
-  await productsStore.deleteProduct(id)
+  try {
+    await ElMessageBox.confirm('Are you sure you want to delete this product?', 'Confirm delete', {
+      confirmButtonText: 'Delete',
+      cancelButtonText: 'Cancel',
+      type: 'warning',
+    })
+
+    await productsStore.deleteProduct(id)
+
+    ElMessage.success('Product deleted')
+  } catch (e) {
+    // User cancelled
+  }
 }
 
 const edit = (row) => {
