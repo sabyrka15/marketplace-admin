@@ -4,24 +4,42 @@ import { onMounted, reactive, ref } from 'vue'
 
 const productsStore = useProductsStore()
 const dialogVisible = ref(false)
+
 const form = reactive({
   name: '',
   price: null,
 })
 
+const editingId = ref(null)
+
 const save = async () => {
-  await productsStore.createProduct({
-    name: form.name,
-    price: form.price,
-  })
+  if (editingId.value) {
+    await productsStore.updateProduct(editingId.value, {
+      name: form.name,
+      price: form.price,
+    })
+  } else {
+    await productsStore.createProduct({
+      name: form.name,
+      price: form.price,
+    })
+  }
 
   dialogVisible.value = false
+  editingId.value = null
   form.name = ''
   form.price = null
 }
 
 const remove = async (id) => {
   await productsStore.deleteProduct(id)
+}
+
+const edit = (row) => {
+  editingId.value = row.id
+  form.name = row.name
+  form.price = row.price
+  dialogVisible.value = true
 }
 
 onMounted(() => {
@@ -54,6 +72,7 @@ onMounted(() => {
     <el-table-column prop="price" label="Price" />
     <el-table-column label="Actions" width="120">
       <template #default="{ row }">
+        <el-button size="small" @click="edit(row)"> Edit </el-button>
         <el-button type="danger" size="small" @click="remove(row.id)"> Delete </el-button>
       </template>
     </el-table-column>

@@ -24,5 +24,13 @@ export const useProductsStore = defineStore('products', {
       await http.delete(`/products/${id}`)
       this.items = this.items.filter((item) => item.id !== id)
     },
+    async updateProduct(id, payload) {
+      const { data } = await http.put(`/products/${id}`, payload)
+
+      const index = this.items.findIndex((item) => item.id === id)
+      if (index !== -1) {
+        this.items[index] = data
+      }
+    },
   },
 })
