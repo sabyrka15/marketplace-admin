@@ -1,7 +1,7 @@
 <script setup>
 import { useProductsStore } from '@/stores/products'
 import { onMounted, reactive, ref } from 'vue'
-import { ElMessageBox, ElMessage } from 'element-plus'
+import { ElMessageBox, ElMessage, ElEmpty } from 'element-plus'
 
 const productsStore = useProductsStore()
 const dialogVisible = ref(false)
@@ -87,7 +87,11 @@ onMounted(() => {
     </el-form>
   </el-dialog>
 
-  <el-table :data="productsStore.items" v-loading="productsStore.loading">
+  <el-empty v-if="!productsStore.loading && productsStore.items.length === 0" description="No products yet">
+    <el-button type="primary" @click="dialogVisible = true"> Create product </el-button>
+  </el-empty>
+
+  <el-table v-else :data="productsStore.items" v-loading="productsStore.loading">
     <el-table-column prop="name" label="Name" />
     <el-table-column prop="price" label="Price" />
     <el-table-column label="Actions" width="120">
