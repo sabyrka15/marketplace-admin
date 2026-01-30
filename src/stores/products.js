@@ -16,5 +16,9 @@ export const useProductsStore = defineStore('products', {
         this.loading = false
       }
     },
+    async createProduct(payload) {
+      const { data } = await http.post('/products', payload)
+      this.items.push(data)
+    },
   },
 })
