@@ -72,9 +72,46 @@ onMounted(() => {
     <el-table-column prop="price" label="Price" />
     <el-table-column label="Actions" width="120">
       <template #default="{ row }">
-        <el-button size="small" @click="edit(row)"> Edit </el-button>
-        <el-button type="danger" size="small" @click="remove(row.id)"> Delete </el-button>
+        <td class="actions">
+          <button class="btn btn-edit" @click="edit(row)">Edit</button>
+          <button class="btn btn-delete" @click="remove(row.id)">Delete</button>
+        </td>
       </template>
     </el-table-column>
   </el-table>
 </template>
+
+<style scoped>
+.actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  transition: 0.2s;
+}
+
+.btn-edit {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.btn-edit:hover {
+  background: #e2e8f0;
+}
+
+.btn-delete {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.btn-delete:hover {
+  background: #fecaca;
+}
+</style>
