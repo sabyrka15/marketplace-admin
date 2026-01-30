@@ -1,7 +1,7 @@
 <script setup>
 import { useProductsStore } from '@/stores/products'
 import { onMounted, reactive, ref } from 'vue'
-import { ElMessageBox, ElMessage, ElEmpty } from 'element-plus'
+import { ElMessageBox, ElMessage, ElEmpty, ElSkeleton } from 'element-plus'
 
 const productsStore = useProductsStore()
 const dialogVisible = ref(false)
@@ -68,7 +68,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <el-button type="primary" @click="dialogVisible = true"> Add product </el-button>
+  <el-button
+    v-if="!productsStore.loading && productsStore.items.length > 0"
+    type="primary"
+    @click="dialogVisible = true"
+  >
+    Add product
+  </el-button>
 
   <el-dialog v-model="dialogVisible" title="Add product">
     <el-form :model="form">
@@ -81,25 +87,26 @@ onMounted(() => {
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="save"> Save </el-button>
-        <el-button @click="dialogVisible = false"> Cancel </el-button>
+        <el-button type="primary" @click="save">Save</el-button>
+        <el-button @click="dialogVisible = false">Cancel</el-button>
       </el-form-item>
     </el-form>
   </el-dialog>
 
-  <el-empty v-if="!productsStore.loading && productsStore.items.length === 0" description="No products yet">
+  <el-skeleton v-if="productsStore.loading" :rows="5" animated />
+
+  <el-empty v-else-if="productsStore.items.length === 0" description="No products yet">
     <el-button type="primary" @click="dialogVisible = true"> Create product </el-button>
   </el-empty>
 
-  <el-table v-else :data="productsStore.items" v-loading="productsStore.loading">
+  <el-table v-else :data="productsStore.items">
     <el-table-column prop="name" label="Name" />
     <el-table-column prop="price" label="Price" />
-    <el-table-column label="Actions" width="120">
+
+    <el-table-column label="Actions" width="160">
       <template #default="{ row }">
-        <td class="actions">
-          <button class="btn btn-edit" @click="edit(row)">Edit</button>
-          <button class="btn btn-delete" @click="remove(row.id)">Delete</button>
-        </td>
+        <el-button size="small" @click="edit(row)">Edit</el-button>
+        <el-button size="small" type="danger" @click="remove(row.id)"> Delete </el-button>
       </template>
     </el-table-column>
   </el-table>
