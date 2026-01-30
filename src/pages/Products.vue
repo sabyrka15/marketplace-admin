@@ -14,22 +14,28 @@ const form = reactive({
 const editingId = ref(null)
 
 const save = async () => {
-  if (editingId.value) {
-    await productsStore.updateProduct(editingId.value, {
-      name: form.name,
-      price: form.price,
-    })
-  } else {
-    await productsStore.createProduct({
-      name: form.name,
-      price: form.price,
-    })
-  }
+  try {
+    if (editingId.value) {
+      await productsStore.updateProduct(editingId.value, {
+        name: form.name,
+        price: form.price,
+      })
+      ElMessage.success('Product updated')
+    } else {
+      await productsStore.createProduct({
+        name: form.name,
+        price: form.price,
+      })
+      ElMessage.success('Product created')
+    }
 
-  dialogVisible.value = false
-  editingId.value = null
-  form.name = ''
-  form.price = null
+    dialogVisible.value = false
+    editingId.value = null
+    form.name = ''
+    form.price = null
+  } catch (e) {
+    ElMessage.error('Something went wrong')
+  }
 }
 
 const remove = async (id) => {
@@ -41,10 +47,11 @@ const remove = async (id) => {
     })
 
     await productsStore.deleteProduct(id)
-
     ElMessage.success('Product deleted')
   } catch (e) {
-    // User cancelled
+    if (e !== 'cancel') {
+      ElMessage.error('Failed to delete product')
+    }
   }
 }
 
